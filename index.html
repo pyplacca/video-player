@@ -7,25 +7,26 @@
 		<title>Video Player</title>
 	</head>
 
-	<body>
+	<body class="flex-col flex-center">
 		<p class="title"></p>
 
-		<div class="container">
-			<span class="btn" id="play" onclick="togglePlay(event)"></span>
+		<div class="container flex">
+			<span class="btn flex" id="play"></span>
 			<video
 				autoPictureInPicture="true"
-				onclick="togglePlay(event)"
+				onclick="togglePlay()"
 				onpause="toggleBtn(event)"
 				onloadeddata="updateProg(event)"
 				ontimeupdate="updatePlaybackProgress(event)"
 			>
 				<source
 					src="E:\mvs\Yesterday (2019) [BluRay] [720p] [YTS.LT]\Yesterday.2019.720p.BluRay.x264-[YTS.LT].mp4"
+					type=""
 				/>
 			</video>
 		</div>
 
-		<div class="prog">
+		<div class="prog flex-center flex-between">
 			<p id="curTime"></p>
 			<progress
 				onclick="adjustPlayback(event)"
@@ -35,8 +36,8 @@
 			>
 			</progress>
 			<p id="duration"></p>
-			<span class="marker">
-				<p class="time"></p>
+			<span class="marker flex-center">
+				<small class="time"></small>
 			</span>
 		</div>
 
