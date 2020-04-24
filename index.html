@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript" src="player.js" defer></script>
+		<title>Video Player</title>
+	</head>
+
+	<body>
+		<p class="title"></p>
+
+		<div class="container">
+			<span class="btn" id="play" onclick="togglePlay(event)"></span>
+			<video
+				autoPictureInPicture="true"
+				onclick="togglePlay(event)"
+				onpause="toggleBtn(event)"
+				onloadeddata="updateProg(event)"
+				ontimeupdate="updatePlaybackProgress(event)"
+			>
+				<source
+					src="E:\mvs\Yesterday (2019) [BluRay] [720p] [YTS.LT]\Yesterday.2019.720p.BluRay.x264-[YTS.LT].mp4"
+				/>
+			</video>
+		</div>
+
+		<div class="prog">
+			<p id="curTime"></p>
+			<progress
+				onclick="adjustPlayback(event)"
+				onmousemove="moveMarker(event)"
+				onmouseenter="showMarker()"
+				onmouseleave="hideMarker()"
+			>
+			</progress>
+			<p id="duration"></p>
+			<span class="marker">
+				<p class="time"></p>
+			</span>
+		</div>
+
+	</body>
+</html>
