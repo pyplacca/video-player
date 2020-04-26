@@ -32,13 +32,12 @@
 }
 
 body {
-	display: flex;
 	height: 100vh;
 }
 
 .container {
-	width: 720px;
-	height: 460px;
+	width: 900px;
+	height: 500px;
 	position: relative;
 	
 	border: 5px solid var(--grey-light);
@@ -91,7 +90,7 @@ body {
 	margin-top: 42px;
 }
 
-.title,
+#title,
 .prog p,
 .prog .marker .time {
 	color: var(--grey-ish);
@@ -99,7 +98,7 @@ body {
 	font-size: 0.92rem;
 }
 
-.title {
+#title {
 	margin-bottom: 32px;
 	font-size: 1.15rem;
 }
@@ -145,5 +144,24 @@ body {
 	position: relative;
 	top: -22px;
 	color: var(--color);
-	font-size: 0.75rem;
+	font-size: 0.82rem;
+}
+
+#light {
+	width: 30px;
+	height: 30px;
+	
+	position: fixed;
+	left: 12%;
+	top: calc(50% - var(--h) / 2);
+	
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: url("img/light-on.png");
+	
+	cursor: pointer;
+}
+
+#light[class="off"] {
+	background-image: url("img/light-off.png")
 }
