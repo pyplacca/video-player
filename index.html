@@ -8,7 +8,7 @@
 	</head>
 
 	<body class="flex-col flex-center">
-		<p class="title"></p>
+		<p id="title">Drag a video file over here 👇</p>
 
 		<div class="container flex">
 			<span class="btn flex" id="play"></span>
@@ -16,18 +16,19 @@
 				autoPictureInPicture="true"
 				onclick="togglePlay()"
 				onpause="toggleBtn(event)"
-				onloadeddata="updateProg(event)"
+				onloadeddata="updateVideoAttr()"
 				ontimeupdate="updatePlaybackProgress(event)"
+				ondragover="listenDrag('on')"
+				ondragenter="listenDrag('on')"
+				ondragleave="listenDrag('leave')"
+				ondrop="loadDroppedFile(event)"
 			>
-				<source
-					src="E:\mvs\Yesterday (2019) [BluRay] [720p] [YTS.LT]\Yesterday.2019.720p.BluRay.x264-[YTS.LT].mp4"
-					type=""
-				/>
+				<source/>
 			</video>
 		</div>
 
 		<div class="prog flex-center flex-between">
-			<p id="curTime"></p>
+			<p id="played"></p>
 			<progress
 				onclick="adjustPlayback(event)"
 				onmousemove="moveMarker(event)"
@@ -35,11 +36,13 @@
 				onmouseleave="hideMarker()"
 			>
 			</progress>
-			<p id="duration"></p>
+			<p id="duration">00:00:00</p>
 			<span class="marker flex-center">
 				<small class="time"></small>
 			</span>
 		</div>
+
+		<span id="light" class="on" title="turn the lights off" onclick="toggleLight()"></span>
 
 	</body>
 </html>
