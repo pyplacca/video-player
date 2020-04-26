@@ -1,12 +1,13 @@
-
 // Global Elements
-const [prog, video, btn, cur, dur, marker] = [
+const [prog, video, btn, played, dur, marker, light, title] = [
 	".prog progress",
 	"video",
 	".btn",
-	"#curTime",
+	"#played",
 	"#duration",
 	".prog .marker",
+	"#light",
+	"#title"
 ].map((arg) => document.querySelector(arg));
 
 // jump playback forwards or backwards
@@ -33,11 +34,29 @@ function hideMarker() {
 	marker.style.transform = "scale(0)";
 }
 
+function listenDrag(e) {
+	title.innerText = e === 'on' ? 
+		'Now drop it like it\'s hot 🔥' : 
+			!video.name ? 'Drag a video file over here 👇' : video.name
+}
+
+// load video file when dropped
+function loadDroppedFile(e) {
+	let file = e.dataTransfer.files[0]
+	const result = webkitURL.createObjectURL(file)
+
+	Array(['src', result], ['type', file.type])
+		.forEach( entry => video.firstElementChild.setAttribute(...entry))
+	
+	video.load()
+	video.name = file.name
+}
+
 // follow cursor and re-position playback marker
 function moveMarker(e) {
+	marker.style.left = e.offsetX + e.target.offsetLeft - marker.clientWidth / 2 + "px";
 	// show playback time at current mark
 	marker.firstElementChild.innerText = formatTime(getTime(e));
-	marker.style.left = e.offsetX + e.target.offsetLeft - marker.clientWidth / 2 + "px";
 }
 
 function showMarker() {
@@ -47,6 +66,18 @@ function showMarker() {
 // toggles play/pause icon
 function toggleBtn(e) {
 	e.target.previousElementSibling.id = "play";
+}
+
+function toggleLight() {
+
+	const [color, shadow, cls, tooltip] = light.className === 'on' ? 
+		['#000', 'none', 'off', 'turn the lights on'] :
+			['unset', '0 5px 9px var(--grey-ish)', 'on', 'turn the lights off']
+
+	light.className = cls
+	video.parentNode.style.boxShadow = shadow
+	document.querySelector('body').style.backgroundColor = color
+	light.setAttribute('title', tooltip)
 }
 
 // switch between pause and play states
@@ -62,49 +93,48 @@ function togglePlay() {
 
 function updatePlaybackProgress(e) {
 	prog.value = e.target.currentTime;
-	cur.innerText = formatTime(e.target.currentTime);
+	played.innerText = formatTime(e.target.currentTime);
 }
 
-function updateProg(e) {
-	prog.max = e.target.duration;
-	dur.innerText = formatTime(e.target.duration);
+function updateVideoAttr() {
+	prog.max = video.duration;
+	dur.innerText = formatTime(video.duration);
+	video.pause()
 	// update title
-	document.querySelector(".title").innerText = 
-		e.target.currentSrc.split("/").pop();
+	title.innerText = video.name
+
 }
 
-/*
 // Drag and Drop Support
+// prevent file from being automatically opened by browser
 'drag dragstart dragend dragover dragenter dragleave drop'
 	.split(' ')
 	.forEach(arg => {
 		document.addEventListener(arg, e => {
-			// prevent file from being automatically opened by browser
 			e.preventDefault()
 			e.stopPropagation()
+			// title.innerText = 'Now drop it like it\'s hot'
 		})
 	})
-// accept file
-// 'dragover dragenter'.split(' ').forEach(arg => {
-// 	video.addEventListener(arg, e => video.style.cursor = '')
-// })
-reader = new FileReader()
-video.ondrop = e => {
-	let file = e.dataTransfer.files[0]
-	console.log(file)
-	reader.readAsDataURL(file)
-	reader.onload = arg => {
-		console.log(arg.result)
-	}
-}
-*/
-cur.innerText = formatTime(0);
+
+// default played time to 00:00:00 
+played.innerText = formatTime(0);
+
 // load marker
 marker.style.width = marker.style.height = prog.clientHeight + "px";
 marker.style.top = prog.offsetTop + "px";
-// play/pause key binding
-document.onkeypress = key => {
-	key.code === "Space" ? togglePlay() : null
+
+// playback key bindings
+document.onkeydown = key => {
+	// console.log(key)
+	key.code === "Space" ? togglePlay() : 
+	key.code === "ArrowRight" ? video.currentTime += (
+		key.ctrlKey ? 56 : key.shiftKey && !key.ctrlKey ? 3 : 12
+	) :
+	key.code === "ArrowLeft" ? video.currentTime -= (
+		key.ctrlKey ? 60 : key.shiftKey && !key.ctrlKey ? 5 : 15
+	) : 
+	null
 }
 
 window.onblur = () => video.pause(); // pause video when window looses focus
