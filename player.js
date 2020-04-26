@@ -113,7 +113,6 @@ function updateVideoAttr() {
 		document.addEventListener(arg, e => {
 			e.preventDefault()
 			e.stopPropagation()
-			// title.innerText = 'Now drop it like it\'s hot'
 		})
 	})
 
@@ -126,7 +125,6 @@ marker.style.top = prog.offsetTop + "px";
 
 // playback key bindings
 document.onkeydown = key => {
-	// console.log(key)
 	key.code === "Space" ? togglePlay() : 
 	key.code === "ArrowRight" ? video.currentTime += (
 		key.ctrlKey ? 56 : key.shiftKey && !key.ctrlKey ? 3 : 12
@@ -137,5 +135,5 @@ document.onkeydown = key => {
 	null
 }
 
-window.onblur = () => video.pause(); // pause video when window looses focus
-window.onfocus = () => prog.value ? togglePlay() : null; // starts video when window gains focus
+window.onblur = () => video.pause(); // pauses video when window looses focus
+window.onfocus = () => prog.value ? togglePlay() : null; // plays video when window gains focus
