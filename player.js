@@ -36,7 +36,7 @@ function hideMarker() {
 
 function listenDrag(e) {
 	title.innerText = e === 'on' ? 
-		'Now drop it like it\'s hot 🔥' : 
+		'Drop it like it\'s hot 🔥' : 
 			!video.name ? 'Drag a video file over here 👇' : video.name
 }
 
@@ -45,9 +45,9 @@ function loadDroppedFile(e) {
 	let file = e.dataTransfer.files[0]
 	const result = webkitURL.createObjectURL(file)
 
-	Array(['src', result], ['type', file.type])
-		.forEach( entry => video.firstElementChild.setAttribute(...entry))
-	
+	// Array(['src', result], ['type', file.type])
+	// 	.forEach( entry => video.firstElementChild.setAttribute(...entry))
+ 	video.firstElementChild.setAttribute('src', result)
 	video.load()
 	video.name = file.name
 }
@@ -99,10 +99,8 @@ function updatePlaybackProgress(e) {
 function updateVideoAttr() {
 	prog.max = video.duration;
 	dur.innerText = formatTime(video.duration);
-	video.pause()
-	// update title
-	title.innerText = video.name
-
+	togglePlay()
+	title.innerText = video.name // update title
 }
 
 // Drag and Drop Support
@@ -120,18 +118,22 @@ function updateVideoAttr() {
 played.innerText = formatTime(0);
 
 // load marker
-marker.style.width = marker.style.height = prog.clientHeight + "px";
-marker.style.top = prog.offsetTop + "px";
+marker.style.width = marker.style.height = prog.clientHeight + 'px';
+marker.style.top = prog.offsetTop + 'px';
 
 // playback key bindings
 document.onkeydown = key => {
-	key.code === "Space" ? togglePlay() : 
-	key.code === "ArrowRight" ? video.currentTime += (
-		key.ctrlKey ? 56 : key.shiftKey && !key.ctrlKey ? 3 : 12
+	console.log(key)
+	key.code === 'Space' ? togglePlay() : 
+	key.code === 'ArrowRight' ? video.currentTime += (
+		key.ctrlKey ? 56 : key.shiftKey && !key.ctrlKey ? 2 : 12
 	) :
-	key.code === "ArrowLeft" ? video.currentTime -= (
-		key.ctrlKey ? 60 : key.shiftKey && !key.ctrlKey ? 5 : 15
+	key.code === 'ArrowLeft' ? video.currentTime -= (
+		key.ctrlKey ? 60 : key.shiftKey && !key.ctrlKey ? 3 : 15
 	) : 
+	key.code === 'KeyF' ? (
+		video.webkitDisplayingFullscreen ? video.webkitExitFullscreen() : video.webkitEnterFullscreen()
+	) :
 	null
 }
 
